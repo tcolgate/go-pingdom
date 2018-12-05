@@ -78,6 +78,13 @@ type SummaryPerformanceRequest struct {
 	Order         string
 }
 
+type SummaryOutageRequest struct {
+	Id    int
+	From  int
+	To    int
+	Order string
+}
+
 // Params returns a map of parameters for an HttpCheck that can be sent along
 // with an HTTP PUT request
 func (ck *HttpCheck) PutParams() map[string]string {
@@ -336,6 +343,28 @@ func (csr SummaryPerformanceRequest) GetParams() (params map[string]string) {
 
 	if csr.IncludeUptime {
 		params["includeuptime"] = "true"
+	}
+
+	return
+}
+
+func (csr SummaryOutageRequest) Valid() error {
+	if csr.Id == 0 {
+		return ErrMissingId
+	}
+
+	return nil
+}
+
+func (csr SummaryOutageRequest) GetParams() (params map[string]string) {
+	params = make(map[string]string)
+
+	if csr.From != 0 {
+		params["from"] = strconv.FormatInt(int64(csr.From), 10)
+	}
+
+	if csr.To != 0 {
+		params["to"] = strconv.FormatInt(int64(csr.To), 10)
 	}
 
 	return
