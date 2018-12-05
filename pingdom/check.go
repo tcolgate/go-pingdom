@@ -127,6 +127,24 @@ func (cs *CheckService) Delete(id int) (*PingdomResponse, error) {
 	return m, err
 }
 
+func (cs *CheckService) Results(request ResultsRequest) (*ResultsResponse, error) {
+	if err := request.Valid(); err != nil {
+		return nil, err
+	}
+
+	req, err := cs.client.NewRequest("GET", "/results/"+strconv.Itoa(request.Id), request.GetParams())
+	if err != nil {
+		return nil, err
+	}
+	m := &ResultsResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
 func (cs *CheckService) SummaryPerformance(request SummaryPerformanceRequest) (*SummaryPerformanceResponse, error) {
 	if err := request.Valid(); err != nil {
 		return nil, err

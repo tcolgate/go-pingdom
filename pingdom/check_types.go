@@ -68,6 +68,19 @@ type TCPCheck struct {
 	StringToExpect           string `json:"stringtoexpect,omitempty"`
 }
 
+type ResultsRequest struct {
+	Id              int
+	From            int
+	To              int
+	Probes          string
+	Status          string
+	Limit           int
+	Offset          int
+	IncludeAnalysis bool
+	MinResponse     int
+	MaxResponse     int
+}
+
 type SummaryPerformanceRequest struct {
 	Id            int
 	From          int
@@ -323,6 +336,27 @@ func intListToCDString(integers []int) string {
 	return CDString
 }
 
+func (crr ResultsRequest) Valid() error {
+	if crr.Id == 0 {
+		return ErrMissingId
+	}
+
+	return nil
+}
+
+func (crr ResultsRequest) GetParams() (params map[string]string) {
+	params = make(map[string]string)
+
+	if crr.From != 0 {
+		params["from"] = strconv.FormatInt(int64(crr.From), 10)
+	}
+
+	if crr.To != 0 {
+		params["to"] = strconv.FormatInt(int64(crr.To), 10)
+	}
+
+	return
+}
 func (csr SummaryPerformanceRequest) Valid() error {
 	if csr.Id == 0 {
 		return ErrMissingId

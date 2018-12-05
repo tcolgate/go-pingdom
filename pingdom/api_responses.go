@@ -109,6 +109,21 @@ type PublicReportResponse struct {
 	ReportURL string `json:"reporturl"`
 }
 
+type ResultsResponse struct {
+	Results      CheckResult `json:"results"`
+	ActiveProbes []int       `json:"activeprobes"`
+}
+
+type CheckResult struct {
+	ProbeID        int    `json:"probeid"`
+	Time           int    `json:"time"`
+	Status         string `json:"status"`
+	ResponseTime   int    `json:"responsetime"`
+	StatusDesc     string `json:"statusdesc"`
+	StatusDescLong string `json:"statusdesclong"`
+	AnalysisID     int    `json:"analysisid,omitempty"`
+}
+
 type SummaryPerformanceResponse struct {
 	Summary SummaryPerformanceMap `json:"summary"`
 }
